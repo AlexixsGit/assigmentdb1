@@ -87,6 +87,12 @@ profile manager;
 
 GRANT CONNECT TO user3;
 
+CREATE USER user4 
+IDENTIFIED BY user123
+DEFAULT TABLESPACE gofar_travel 
+profile manager;
+
+GRANT CONNECT TO user4;
 
 /*Vehicles Sequences*/
 CREATE SEQUENCE VEHICLES_SEQ
