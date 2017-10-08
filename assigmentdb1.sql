@@ -76,21 +76,21 @@ GRANT CONNECT TO user1;
 CREATE USER user2 
 IDENTIFIED BY user2
 DEFAULT TABLESPACE gofar_travel 
-profile manager;
+profile finance;
 
 GRANT CONNECT TO user2;
 
 CREATE USER user3 
 IDENTIFIED BY user3
 DEFAULT TABLESPACE gofar_travel 
-profile manager;
+profile development;
 
 GRANT CONNECT TO user3;
 
 CREATE USER user4 
 IDENTIFIED BY user4
 DEFAULT TABLESPACE gofar_travel 
-profile manager;
+profile development;
 
 GRANT CONNECT TO user4;
 
