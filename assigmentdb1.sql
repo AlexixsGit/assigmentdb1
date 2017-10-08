@@ -97,6 +97,10 @@ GRANT CONNECT TO user4;
 /*DROP TABLESPACE test_purposes*/
 DROP TABLESPACE test_purposes
    INCLUDING CONTENTS AND DATAFILES;
+   
+/*Lock the users associate with profiles: manager and finance*/
+ALTER USER user1 ACCOUNT LOCK;
+ALTER USER user2 ACCOUNT LOCK;
 
 /*Vehicles Sequences*/
 CREATE SEQUENCE VEHICLES_SEQ
