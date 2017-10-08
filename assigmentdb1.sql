@@ -94,6 +94,10 @@ profile development;
 
 GRANT CONNECT TO user4;
 
+/*DROP TABLESPACE test_purposes*/
+DROP TABLESPACE test_purposes
+   INCLUDING CONTENTS AND DATAFILES;
+
 /*Vehicles Sequences*/
 CREATE SEQUENCE VEHICLES_SEQ
 START WITH 1
