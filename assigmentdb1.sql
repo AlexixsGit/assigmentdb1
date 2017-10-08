@@ -26,6 +26,7 @@ segment space management auto
 online;
 
 
+
 SELECT TABLESPACE_NAME "TABLESPACE",
    INITIAL_EXTENT "INITIAL_EXT",
    NEXT_EXTENT "NEXT_EXT",
