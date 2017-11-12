@@ -300,4 +300,14 @@ ALTER TABLE ACCESORIES_INVENTORY ADD CONSTRAINT FK_ACCINV_ACCESORY
 alter table HISTORICAL_DATA_FOR_VEHICLES
     add  constraint ckHistoricalTable check (status in ('NEW', 'TRADE', 'SOLD'));
     
+
+/*Create a view in order to display those products which are under 5 units availables, the view should
+have the id, the name of the product, code and the name of the manufacturer*/
+create or replace view accesories_under_five_units as
+select ac.id, ac.description as name, ac.code, mf.name as manufacturer from accesories ac inner join accesories_inventory acinv on ac.id = acinv.accesory_ID
+inner join MANUFACTURES mf on mf.id = ac.MANUFACURE_ID
+where acinv.units_available < 5;
+
+    
+    
     
