@@ -862,51 +862,52 @@ CREATE OR REPLACE TRIGGER INSERT_INVOICE_DETAIL
     AFTER INSERT ON INVOICE 
     FOR EACH ROW 
 DECLARE
-    l_task VARCHAR2(30) := 'test_task';
-    l_task1 VARCHAR2(30) := 'test_task1';
-    l_stmt CLOB;    
+    l_task VARCHAR2(30) := 'test_task2';
+    l_stmt VARCHAR2(255);    
     PRAGMA AUTONOMOUS_TRANSACTION;    
     RANDOM_ID_ACC NUMBER;
-    VFS_ID NUMBER;
-    FINAL_PRICE NUMBER(10,2);
-    COSTO_DETAIL NUMBER(10,2);    
+    VFS_ID TRADE_IN_VEHICLES.VEHICLE_FOR_SALE_ID%TYPE;
+    F_PRICE INVOICE.FINAL_PRICE%TYPE := 0;
+    S_PRICE ACCESORIES.SELLING_PRICE%TYPE;
+    COSTO_DETAIL ACCESORIES.COST%TYPE;    
 BEGIN
-    DBMS_PARALLEL_EXECUTE.create_task (task_name => l_task);
-    SELECT CEIL(DBMS_RANDOM.VALUE(1,100)) INTO RANDOM_ID_ACC FROM DUAL;--RANDOM ID TO SELECT ACCESORIES    
-    SELECT TIV.VEHICLE_FOR_SALE_ID INTO VFS_ID FROM TRADE_IN_VEHICLES TIV WHERE TIV.ID = :NEW.TRADE_IN_VEHICLE_ID;        
-    SELECT ACC.SELLING_PRICE + :NEW.LICENSE_FEES + :NEW.PLUS + :NEW.TAXES INTO FINAL_PRICE FROM ACCESORIES ACC WHERE ACC.ID = RANDOM_ID_ACC;    
-    SELECT ACC.SELLING_PRICE INTO COSTO_DETAIL FROM ACCESORIES ACC WHERE ACC.ID = RANDOM_ID_ACC;            
-    
-    l_stmt := 'UPDATE INVOICE NI SET NI.VEHICLE_FOR_SALE_ID = VFS_ID WHERE NI.ID = :NEW.ID';        
-    DBMS_PARALLEL_EXECUTE.create_chunks_by_sql(task_name => l_task,
-                                             sql_stmt  => l_stmt,
-                                             by_rowid  => FALSE);
-    DBMS_PARALLEL_EXECUTE.run_task(task_name      => l_task,
-                                 sql_stmt       => l_stmt,
-                                 language_flag  => DBMS_SQL.NATIVE,
-                                 parallel_level => 10);
-    commit;
     DBMS_PARALLEL_EXECUTE.drop_task(l_task);
-    DBMS_PARALLEL_EXECUTE.create_task (task_name => l_task1);
-                                             
-    l_stmt := 'UPDATE INVOICE NI SET NI.FINAL_PRICE = FINAL_PRICE WHERE NI.ID = :NEW.ID';
-    DBMS_PARALLEL_EXECUTE.create_chunks_by_sql(task_name => l_task1,
-                                             sql_stmt  => l_stmt,
-                                             by_rowid  => FALSE);
-    DBMS_PARALLEL_EXECUTE.run_task(task_name      => l_task1,
-                                 sql_stmt       => l_stmt,
-                                 language_flag  => DBMS_SQL.NATIVE,
-                                 parallel_level => 10);
-    commit;
-    DBMS_PARALLEL_EXECUTE.drop_task(l_task1);
+         
+    DBMS_PARALLEL_EXECUTE.create_task (task_name => l_task);
+    
+    SELECT CEIL(DBMS_RANDOM.VALUE(1,100)) INTO RANDOM_ID_ACC FROM DUAL;--RANDOM ID TO SELECT ACCESORIES    
+    SELECT TIV.VEHICLE_FOR_SALE_ID INTO VFS_ID FROM TRADE_IN_VEHICLES TIV WHERE TIV.ID = :NEW.TRADE_IN_VEHICLE_ID; 
+    SELECT ACC.SELLING_PRICE INTO COSTO_DETAIL FROM ACCESORIES ACC WHERE ACC.ID = RANDOM_ID_ACC; 
+    SELECT ACC.SELLING_PRICE INTO S_PRICE FROM ACCESORIES ACC WHERE ACC.ID = RANDOM_ID_ACC;    
+  
+    F_PRICE := TO_NUMBER(S_PRICE + :NEW.LICENSE_FEES + :NEW.PLUS + :NEW.TAXES,2);
+    --NO HE SIDO CAPAZ DE SOLUCIONAR ESTA SUMATORIA YA CON ESTO DEBERIA FUNCIONAR EL TRIGGER PARA INSERTAR TODOS LOS INVOICE    
+        
+    l_stmt := 'UPDATE INVOICE SET VEHICLE_FOR_SALE_ID = VFS_ID, FINAL_PRICE = F_PRICE WHERE ID = :NEW.ID';        
+    DBMS_PARALLEL_EXECUTE.create_chunks_by_sql(
+        task_name => l_task,
+        sql_stmt  => l_stmt,
+        by_rowid  => FALSE
+    );
+        
+    DBMS_PARALLEL_EXECUTE.run_task(
+        task_name => l_task,
+        sql_stmt => l_stmt,
+        language_flag => DBMS_SQL.NATIVE,
+        parallel_level => 10
+    );
+    COMMIT;
+    DBMS_PARALLEL_EXECUTE.drop_task(l_task);
     
     INSERT INTO INVOICE_DETAIL(ID,INVOICE_ID,ACCESORIES_ID,COST) 
     VALUES(INVOICE_DETAIL_SEQ.NEXTVAL,:NEW.ID,RANDOM_ID_ACC,COSTO_DETAIL);
     COMMIT;
 END INSERT_INVOICE_DETAIL; 
 
-SELECT * FROM INVOICE;
-SELECT * FROM INVOICE_DETAIL;
+
+--SELECT * FROM INVOICE;
+--SELECT * FROM INVOICE_DETAIL;
+
 
 /*INVOICE*/
 INSERT INTO INVOICE (id,CUSTOMER_ID,VEHICLE_FOR_SALE_ID,FINAL_PRICE,PLUS,TAXES,LICENSE_FEES,SALES_PERSON_ID,TRADE_IN_VEHICLE_ID) VALUES (INVOICE_SEQ.NEXTVAL,1,1,1,85701,87074,149331,1,23);
