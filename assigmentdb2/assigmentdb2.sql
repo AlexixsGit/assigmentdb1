@@ -302,11 +302,33 @@ alter table HISTORICAL_DATA_FOR_VEHICLES
     
 
 /*Create a view in order to display those products which are under 5 units availables, the view should
-have the id, the name of the product, code and the name of the manufacturer*/
-create or replace view accesories_under_five_units as
-select ac.id, ac.description as name, ac.code, mf.name as manufacturer from accesories ac inner join accesories_inventory acinv on ac.id = acinv.accesory_ID
-inner join MANUFACTURES mf on mf.id = ac.MANUFACURE_ID
-where acinv.units_available < 5;
+have the id, the name of the product, code and the name of the manufacturer
+CREATE OR REPLACE accesories_under_five_units as
+SELECT ac.id, 
+       ac.description as name, 
+       ac.code, mf.name as manufacturer
+  FROM accesories ac 
+ INNER JOIN accesories_inventory acinv 
+    ON ac.id = acinv.accesory_ID
+ INNER JOIN MANUFACTURES mf on mf.id = ac.MANUFACURE_ID
+ WHERE acinv.units_available < 5;
+*/
+ --------------------------------------------------------
+--  View ACCESORIES_UNDER_FIVE_UNITS
+--------------------------------------------------------
+
+CREATE OR REPLACE FORCE VIEW "SYSTEM"."ACCESORIES_UNDER_FIVE_UNITS" ("ID", "NAME", "CODE", "MANUFACTURER", "UNITS_AVAILABLE") AS 
+  SELECT ac.id, 
+       ac.description as name, 
+       ac.code, mf.name as manufacturer,
+       acinv.units_available
+  FROM accesories ac 
+ INNER JOIN accesories_inventory acinv 
+    ON ac.id = acinv.accesory_ID
+ INNER JOIN MANUFACTURES mf on mf.id = ac.MANUFACURE_ID
+ WHERE acinv.units_available < 5
+;
+
 
 /*INSERT DATA*/
 /*MANUFACTURES*/
@@ -1010,8 +1032,6 @@ INSERT INTO INVOICE (id,CUSTOMER_ID,VEHICLE_FOR_SALE_ID,FINAL_PRICE,PLUS,TAXES,L
 INSERT INTO INVOICE (id,CUSTOMER_ID,VEHICLE_FOR_SALE_ID,FINAL_PRICE,PLUS,TAXES,LICENSE_FEES,SALES_PERSON_ID,TRADE_IN_VEHICLE_ID) VALUES (INVOICE_SEQ.NEXTVAL,3,1,1,74706,66270,108950,2,19);
 INSERT INTO INVOICE (id,CUSTOMER_ID,VEHICLE_FOR_SALE_ID,FINAL_PRICE,PLUS,TAXES,LICENSE_FEES,SALES_PERSON_ID,TRADE_IN_VEHICLE_ID) VALUES (INVOICE_SEQ.NEXTVAL,1,1,1,97059,50780,129419,5,5);
 INSERT INTO INVOICE (id,CUSTOMER_ID,VEHICLE_FOR_SALE_ID,FINAL_PRICE,PLUS,TAXES,LICENSE_FEES,SALES_PERSON_ID,TRADE_IN_VEHICLE_ID) VALUES (INVOICE_SEQ.NEXTVAL,16,1,1,74249,64679,137973,5,8);
-
-<<<<<<< HEAD
 
 --------------------------------------------------------
 --  Trigger UPDATE_INVENTORY para el punto 4
