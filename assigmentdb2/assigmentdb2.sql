@@ -536,7 +536,7 @@ INSERT INTO VEHICLES_FOR_SALE (id,vehicle_id,description) VALUES (VEHICLES_FOR_S
 INSERT INTO VEHICLES_FOR_SALE (id,vehicle_id,description) VALUES (VEHICLES_FOR_SALE_SEQ.NEXTVAL,48,'Duis cursus, diam at pretium aliquet,');
 INSERT INTO VEHICLES_FOR_SALE (id,vehicle_id,description) VALUES (VEHICLES_FOR_SALE_SEQ.NEXTVAL,49,'ac urna. Ut tincidunt vehicula risus. Nulla eget metus');
 INSERT INTO VEHICLES_FOR_SALE (id,vehicle_id,description) VALUES (VEHICLES_FOR_SALE_SEQ.NEXTVAL,50,'magna nec quam. Curabitur vel lectus.');
-INSERT INTO VEHICLES_FOR_SALE (id,vehicle_id,description) VALUES (VEHICLES_FOR_SALE_SEQ.NEXTVAL,51,'mollis vitae, posuere at, velit. Cras lorem lorem, luctus ut,');
+--INSERT INTO VEHICLES_FOR_SALE (id,vehicle_id,description) VALUES (VEHICLES_FOR_SALE_SEQ.NEXTVAL,51,'mollis vitae, posuere at, velit. Cras lorem lorem, luctus ut,');
 
 /*NEW_VEHICLES*/
 INSERT INTO NEW_VEHICLES (id,vehicle_for_sale_id,manufacture_id,cost) VALUES (NEW_VEHICLES_SEQ.NEXTVAL,1,1,49220881.86);
@@ -589,7 +589,7 @@ INSERT INTO NEW_VEHICLES (id,vehicle_for_sale_id,manufacture_id,cost) VALUES (NE
 INSERT INTO NEW_VEHICLES (id,vehicle_for_sale_id,manufacture_id,cost) VALUES (NEW_VEHICLES_SEQ.NEXTVAL,48,48,48524139.32);
 INSERT INTO NEW_VEHICLES (id,vehicle_for_sale_id,manufacture_id,cost) VALUES (NEW_VEHICLES_SEQ.NEXTVAL,49,49,44222452.64);
 INSERT INTO NEW_VEHICLES (id,vehicle_for_sale_id,manufacture_id,cost) VALUES (NEW_VEHICLES_SEQ.NEXTVAL,50,50,22032444.67);
-INSERT INTO NEW_VEHICLES (id,vehicle_for_sale_id,manufacture_id,cost) VALUES (NEW_VEHICLES_SEQ.NEXTVAL,51,51,46231606.18);
+--INSERT INTO NEW_VEHICLES (id,vehicle_for_sale_id,manufacture_id,cost) VALUES (NEW_VEHICLES_SEQ.NEXTVAL,51,51,46231606.18);
 
 /*TRADE_IN_VEHICLES*/
 INSERT INTO TRADE_IN_VEHICLES (id,vehicle_for_sale_id,cost,other_details) VALUES (TRADE_IN_VEHICLES_SEQ.NEXTVAL,1,50914503.80,'dignissim. Maecenas ornare egestas ligula.');
@@ -642,7 +642,7 @@ INSERT INTO TRADE_IN_VEHICLES (id,vehicle_for_sale_id,cost,other_details) VALUES
 INSERT INTO TRADE_IN_VEHICLES (id,vehicle_for_sale_id,cost,other_details) VALUES (TRADE_IN_VEHICLES_SEQ.NEXTVAL,48,62411036.40,'habitant morbi tristique senectus et');
 INSERT INTO TRADE_IN_VEHICLES (id,vehicle_for_sale_id,cost,other_details) VALUES (TRADE_IN_VEHICLES_SEQ.NEXTVAL,49,16460147.84,'vitae odio sagittis semper. Nam');
 INSERT INTO TRADE_IN_VEHICLES (id,vehicle_for_sale_id,cost,other_details) VALUES (TRADE_IN_VEHICLES_SEQ.NEXTVAL,50,30642436.84,'dolor elit, pellentesque a, facilisis');
-INSERT INTO TRADE_IN_VEHICLES (id,vehicle_for_sale_id,cost,other_details) VALUES (TRADE_IN_VEHICLES_SEQ.NEXTVAL,51,15466327.48,'nascetur ridiculus mus. Proin vel');
+--INSERT INTO TRADE_IN_VEHICLES (id,vehicle_for_sale_id,cost,other_details) VALUES (TRADE_IN_VEHICLES_SEQ.NEXTVAL,51,15466327.48,'nascetur ridiculus mus. Proin vel');
 
 /*SALES_PERSON*/
 INSERT INTO SALES_PERSON (ID,NAME) VALUES (SALES_PERSON_SEQ.NEXTVAL,'Kimberley');
@@ -919,14 +919,14 @@ BEGIN
     COMMIT;
 END INSERT_INVOICE_DETAIL_PROC; 
 
-CREATE OR REPLACE TRIGGER INSERT_INVOICE_DETAIL     
+/*CREATE OR REPLACE TRIGGER INSERT_INVOICE_DETAIL     
     AFTER INSERT ON INVOICE 
     FOR EACH ROW 
 DECLARE
 BEGIN
     DBMS_OUTPUT.PUT_LINE('');
     --NOTHING TO DO
-END INSERT_INVOICE_DETAIL;
+END INSERT_INVOICE_DETAIL;*/
 
 --SELECT * FROM INVOICE;
 --SELECT * FROM INVOICE_DETAIL;
