@@ -1104,3 +1104,39 @@ BEGIN
 CLOSE UA;
 END REORDER_UNITS;
 
+
+--------------------------------------------------------
+--  View INFO_INVOICE punto 6
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "SYSTEM"."INFO_INVOICE" ("BILL_ID", "SALES_PERSON_ID", "NAME_OF_SALESPERSON", "CLIENT_ID", "NAME_OF_CLIENT", "VEHICLE_ID", "BRAND_OF_VEHICLE", "MANUFACTURER_OF_VEHICLE", "ACCESORY_ID", "NAME_OF_ACCESORY") AS 
+    SELECT i.ID bill_id,
+           I.SALES_PERSON_ID,
+           S.NAME name_of_salesperson,
+           i.CUSTOMER_ID client_id,
+           c.NAME name_of_client,
+           i.VEHICLE_FOR_SALE_ID vehicle_id,
+           V.MODEL brand_of_vehicle,
+           M.NAME manufacturer_of_vehicle,
+           AC.ID accesory_id,
+           AC.DESCRIPTION name_of_accesory
+      FROM INVOICE I
+     INNER JOIN INVOICE_DETAIL I_D
+        ON I.ID = I_D.INVOICE_ID
+      LEFT JOIN ACCESORIES AC
+        ON AC.ID = I_D.ACCESORIES_ID
+     INNER JOIN SALES_PERSON S
+        ON S.ID = i.SALES_PERSON_ID
+     INNER join CUSTOMER c
+        ON i.CUSTOMER_ID = c.ID
+      LEFT JOIN VEHICLES_FOR_SALE VS
+        ON VS.ID = i.VEHICLE_FOR_SALE_ID
+      LEFT JOIN VEHICLES V
+        ON V.ID = VS.VEHICLE_ID
+      LEFT JOIN NEW_VEHICLES NV
+        ON NV.VEHICLE_FOR_SALE_ID = VS.ID
+      LEFT JOIN MANUFACTURES M
+        ON M.ID = NV.MANUFACTURE_ID
+;
+
+
